@@ -1,0 +1,7 @@
+(load-file "cap03-do-things.clj")
+exit
+ls
+(load-file "cap03-do-things.clj")
+(load-file "cap03-do-thingscap03-do-things.clj")
+(load-file "cap03-do-things/cap03-do-things.clj")
+exit
