@@ -15,7 +15,6 @@
 ;; Escreva uma função que receba um número e adicione 100 a ele.
 
 (defn add-100 [n]
-  ;; TODO
   (+ n 100))
 
 (println (add-100 100))
@@ -37,8 +36,14 @@
 ;; Escreva mapset: como map, mas retorna um set.
 
 (defn mapset [f coll]
-  ;; TODO
-  )
+  (set (map f coll)))
+
+(defn mapset-optimal [f coll]
+  (into #{} (map f) coll))
+
+(mapset inc [1 1 2 2 3 3])
+
+(mapset-optimal (inc-maker 1000) [2 2 4 4 8 8])
 
 ;; ── Exercício 5 ──────────────────────────────────────────────────────────────
 ;; Versão de symmetrize-body-parts para simetria radial (5 lados).
