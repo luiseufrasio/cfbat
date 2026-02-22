@@ -27,8 +27,11 @@
   (fn [x] (+ x inc-by)))
 
 (defn dec-maker [dec-by]
-  ;; TODO
-  )
+  (fn [x] (- x dec-by)))
+
+(def dec-5 (dec-maker 5))
+
+(println (str "10 - 5 = " (dec-5 10)))
 
 ;; ── Exercício 4 ──────────────────────────────────────────────────────────────
 ;; Escreva mapset: como map, mas retorna um set.
