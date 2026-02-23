@@ -9,15 +9,12 @@
 ;; (list 1 2 3)                 ; => (1 2 3)
 ;; (hash-map :a 1 :b 2)        ; => {:a 1, :b 2}
 ;; (hash-set 1 1 2 2 3)        ; => #{1 2 3}
-(println (str "Luís" " Neto"))
 
 ;; ── Exercício 2 ──────────────────────────────────────────────────────────────
 ;; Escreva uma função que receba um número e adicione 100 a ele.
 
 (defn add-100 [n]
   (+ n 100))
-
-(println (add-100 100))
 
 ;; ── Exercício 3 ──────────────────────────────────────────────────────────────
 ;; Escreva dec-maker, similar a inc-maker mas com subtração.
@@ -28,10 +25,6 @@
 (defn dec-maker [dec-by]
   (fn [x] (- x dec-by)))
 
-(def dec-5 (dec-maker 5))
-
-(println (str "10 - 5 = " (dec-5 10)))
-
 ;; ── Exercício 4 ──────────────────────────────────────────────────────────────
 ;; Escreva mapset: como map, mas retorna um set.
 
@@ -40,10 +33,6 @@
 
 (defn mapset-optimal [f coll]
   (into #{} (map f) coll))
-
-(mapset inc [1 1 2 2 3 3])
-
-(mapset-optimal (inc-maker 1000) [2 2 4 4 8 8])
 
 ;; ── Exercício 5 ──────────────────────────────────────────────────────────────
 ;; Versão de symmetrize-body-parts para simetria radial (5 lados).
@@ -69,15 +58,23 @@
    {:name "left-achilles"  :size 1}
    {:name "left-foot"      :size 2}])
 
-(defn matching-part [part]
-  {:name (clojure.string/replace (:name part) #"^left-" "right-")
-   :size (:size part)})
+(defn matching-part [part side & [require-left?]]
+  (when (or (not require-left?)
+            (clojure.string/starts-with? (:name part) "left-"))
+    {:name (clojure.string/replace (:name part) #"^left-" (str side "-"))
+     :size (:size part)}))
 
 (defn radial-symmetrize
   "Versão para alienígenas com simetria radial (5 lados)."
   [asym-body-parts]
-  ;; TODO
-  )
+  (reduce (fn [final-body-parts part]
+            (-> final-body-parts
+              (into (keep identity [part (matching-part part "up" true)]))
+              (into (keep identity [(matching-part part "right" true)]))
+              (into (keep identity [(matching-part part "down-left" true)]))
+              (into (keep identity [(matching-part part "down-right" true)]))))
+          []
+          asym-body-parts))
 
 ;; ── Exercício 6 ──────────────────────────────────────────────────────────────
 ;; Generalize symmetrize-body-parts para N lados.
@@ -107,10 +104,12 @@
     (println (dec9 10)))
 
   (println "\n[Ex4] mapset:")
-  (println (mapset inc [1 1 2 2]))
+  (println (mapset inc [1 1 2 2 3 3]))
+  (println (mapset-optimal (inc-maker 1000) [2 2 4 4 8 8]))
 
   (println "\n[Ex5] radial-symmetrize:")
-  (println (count (radial-symmetrize asym-hobbit-body-parts)) "partes")
+  (println (radial-symmetrize asym-hobbit-body-parts))
+  (println (count (radial-symmetrize asym-hobbit-body-parts)) "parts")
 
   (println "\n[Ex6] generalize-symmetrize (2 lados):")
   (println (count (generalize-symmetrize asym-hobbit-body-parts 2)) "partes")
